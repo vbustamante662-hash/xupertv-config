@@ -1,0 +1,8 @@
+{
+  "vpn_server": "eze-c06.vpn.wlvpn.com",
+  "vpn_user": "USUARIO",
+  "vpn_pass": "CONTRASEÑA",
+  "expires_at": "2026-07-01",
+  "message_expired": "Tu suscripción ha expirado. Contacta para renovar.",
+  "version": 1
+}
