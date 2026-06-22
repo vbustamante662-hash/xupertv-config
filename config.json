@@ -1,8 +1,17 @@
 {
-  "vpn_server": "eze-c06.vpn.wlvpn.com",
-  "vpn_user": "USUARIO",
-  "vpn_pass": "CONTRASEÑA",
-  "expires_at": "2026-07-01",
-  "message_expired": "Tu suscripción ha expirado. Contacta para renovar.",
-  "version": 1
+  "config": {
+    "ovpn_server": "mvd-c01.vpn.wlvpn.com",
+    "ovpn_proto": "udp",
+    "ovpn_port": 1194
+  },
+  "users": [
+    {
+      "username": "cliente1",
+      "password": "clave123",
+      "active": true,
+      "expires": "2026-07-22",
+      "ovpn_user": "nc_fastvpn_user1",
+      "ovpn_pass": "nc_fastvpn_pass1"
+    }
+  ]
 }
