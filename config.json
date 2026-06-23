@@ -11,7 +11,8 @@
       "active": true,
       "expires": "2026-07-22",
       "ovpn_user": "nc_fastvpn_user1",
-      "ovpn_pass": "nc_fastvpn_pass1"
+      "ovpn_pass": "nc_fastvpn_pass1",
+      "allowed_ips": []
     }
   ]
 }

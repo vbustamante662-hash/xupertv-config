@@ -187,6 +187,7 @@
     <div class="mf"><label>Estado</label>
       <select id="f-act"><option value="true">Activo</option><option value="false">Suspendido</option></select>
     </div>
+    <div class="mf"><label>IPs permitidas (una por linea, vacio = todas)</label><textarea id="f-ips" rows="3" placeholder="192.168.1.10"></textarea></div>
     <div class="modal-actions">
       <button class="ap-btn ghost" onclick="closeModal()">Cancelar</button>
       <button class="ap-btn" onclick="saveUser()">Guardar</button>
@@ -281,8 +282,9 @@ function openModal(idx) {
     document.getElementById('f-srv').value = u.ovpn_server||globalConfig.ovpn_server||'';
     document.getElementById('f-exp').value = u.expires;
     document.getElementById('f-act').value = u.active ? 'true' : 'false';
+    document.getElementById('f-ips').value = (u.allowed_ips||[]).join('\n');
   } else {
-    ['f-user','f-pass','f-vu','f-vp'].forEach(id => document.getElementById(id).value='');
+    ['f-user','f-pass','f-vu','f-vp','f-ips'].forEach(id => document.getElementById(id).value='');
     document.getElementById('f-srv').value = globalConfig.ovpn_server||'mvd-c01.vpn.wlvpn.com';
     document.getElementById('f-exp').value = '';
     document.getElementById('f-act').value = 'true';
@@ -293,6 +295,7 @@ function openModal(idx) {
 function closeModal() { document.getElementById('modal-bg').className = 'modal-bg'; }
 
 function saveUser() {
+  const ips = document.getElementById('f-ips').value.split('\n').map(v=>v.trim()).filter(Boolean);
   const u = {
     username: document.getElementById('f-user').value.trim(),
     password: document.getElementById('f-pass').value.trim(),
@@ -300,7 +303,8 @@ function saveUser() {
     expires: document.getElementById('f-exp').value,
     ovpn_user: document.getElementById('f-vu').value.trim(),
     ovpn_pass: document.getElementById('f-vp').value.trim(),
-    ovpn_server: document.getElementById('f-srv').value.trim()
+    ovpn_server: document.getElementById('f-srv').value.trim(),
+    allowed_ips: ips
   };
   if (!u.username || !u.expires) return;
   if (editIdx >= 0) users[editIdx] = u;
