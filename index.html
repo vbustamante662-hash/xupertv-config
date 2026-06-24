@@ -1,202 +1,198 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>XuperTV — Control Center</title>
-  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet"/>
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0;}
-    body{background:#080808;font-family:'Rajdhani',sans-serif;color:#e8d9a0;min-height:100vh;}
-    .bg-lines{position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(180,140,40,0.03) 40px,rgba(180,140,40,0.03) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(180,140,40,0.03) 40px,rgba(180,140,40,0.03) 41px);pointer-events:none;z-index:0;}
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>XuperTV — Control Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600&family=Orbitron:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0;}
+    body{background:#080808;font-family:'Rajdhani',sans-serif;color:#e8d9a0;min-height:100vh;}
+    .bg-lines{position:fixed;top:0;left:0;right:0;bottom:0;background-image:repeating-linear-gradient(0deg,transparent,transparent 40px,rgba(180,140,40,0.03) 40px,rgba(180,140,40,0.03) 41px),repeating-linear-gradient(90deg,transparent,transparent 40px,rgba(180,140,40,0.03) 40px,rgba(180,140,40,0.03) 41px);pointer-events:none;z-index:0;}
 
-    /* NAV */
-    .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:0.5px solid rgba(180,140,40,0.2);background:#080808;position:sticky;top:0;z-index:50;}
-    .nav-logo{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#C9A84C;letter-spacing:4px;}
-    .nav-logo span{font-size:10px;display:block;letter-spacing:3px;color:rgba(180,140,40,0.4);font-family:'Rajdhani',sans-serif;margin-top:1px;}
-    .nav-tabs{display:flex;gap:6px;}
-    .nav-tab{background:transparent;border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;color:rgba(180,140,40,0.5);font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;padding:6px 16px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;}
-    .nav-tab.active{border-color:#C9A84C;color:#C9A84C;background:rgba(180,140,40,0.08);}
-    .nav-tab:hover{border-color:rgba(180,140,40,0.5);color:#C9A84C;}
+    /* NAV */
+    .nav{display:flex;align-items:center;justify-content:space-between;padding:1rem 2rem;border-bottom:0.5px solid rgba(180,140,40,0.2);background:#080808;position:sticky;top:0;z-index:50;}
+    .nav-logo{font-family:'Orbitron',sans-serif;font-size:16px;font-weight:700;color:#C9A84C;letter-spacing:4px;}
+    .nav-logo span{font-size:10px;display:block;letter-spacing:3px;color:rgba(180,140,40,0.4);font-family:'Rajdhani',sans-serif;margin-top:1px;}
+    .nav-tabs{display:flex;gap:6px;}
+    .nav-tab{background:transparent;border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;color:rgba(180,140,40,0.5);font-family:'Rajdhani',sans-serif;font-size:13px;letter-spacing:2px;padding:6px 16px;cursor:pointer;text-transform:uppercase;transition:all 0.2s;}
+    .nav-tab.active{border-color:#C9A84C;color:#C9A84C;background:rgba(180,140,40,0.08);}
+    .nav-tab:hover{border-color:rgba(180,140,40,0.5);color:#C9A84C;}
 
-    /* PAGES */
-    .page{display:none;padding:1.5rem 2rem;position:relative;z-index:1;}
-    .page.active{display:block;}
+    /* PAGES */
+    .page{display:none;padding:1.5rem 2rem;position:relative;z-index:1;}
+    .page.active{display:block;}
 
-    /* LOGIN */
-    .login-wrap{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-    .login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem;}
-    .login-logo-text{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:700;color:#C9A84C;letter-spacing:6px;}
-    .login-logo-sub{font-size:11px;letter-spacing:4px;color:rgba(180,140,40,0.4);margin-top:3px;}
-    .divider{width:160px;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:1rem auto;opacity:0.5;}
-    .login-card{background:rgba(15,15,15,0.98);border:0.5px solid rgba(180,140,40,0.3);border-radius:12px;padding:2rem 2.5rem;width:100%;max-width:360px;position:relative;}
-    .login-card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,140,40,0.5),transparent);}
-    .corner{position:absolute;width:10px;height:10px;border-color:rgba(180,140,40,0.3);border-style:solid;}
-    .tl{top:8px;left:8px;border-width:1px 0 0 1px;}
-    .tr{top:8px;right:8px;border-width:1px 1px 0 0;}
-    .bl{bottom:8px;left:8px;border-width:0 0 1px 1px;}
-    .br{bottom:8px;right:8px;border-width:0 1px 1px 0;}
-    .lc-title{font-size:11px;letter-spacing:3px;color:rgba(180,140,40,0.5);text-transform:uppercase;text-align:center;margin-bottom:1.25rem;}
-    .lc-field{margin-bottom:0.9rem;}
-    .lc-label{display:block;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:5px;}
-    .lc-input{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;padding:9px 13px;color:#e8d9a0;font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
-    .lc-input:focus{border-color:rgba(180,140,40,0.6);}
-    .lc-input::placeholder{color:rgba(180,140,40,0.15);}
-    .lc-btn{width:100%;margin-top:1rem;padding:11px;background:linear-gradient(135deg,#C9A84C,#8B6914);border:none;border-radius:6px;color:#080808;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;}
-    .lc-btn:hover{opacity:0.85;}
-    .lc-status{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:1rem;font-size:11px;letter-spacing:2px;color:rgba(180,140,40,0.35);text-transform:uppercase;}
-    .lc-dot{width:6px;height:6px;border-radius:50%;background:#C9A84C;opacity:0.4;animation:pulse 2s infinite;}
-    @keyframes pulse{0%,100%{opacity:0.2;}50%{opacity:0.9;}}
-    .lc-msg{text-align:center;margin-top:0.75rem;font-size:13px;min-height:18px;}
-    .lc-msg.error{color:#e05a5a;}
-    .lc-msg.ok{color:#5ae08a;}
-    .lc-msg.loading{color:rgba(180,140,40,0.6);}
+    /* LOGIN */
+    .login-wrap{min-height:80vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+    .login-logo{display:flex;flex-direction:column;align-items:center;margin-bottom:1.5rem;}
+    .login-logo-text{font-family:'Orbitron',sans-serif;font-size:26px;font-weight:700;color:#C9A84C;letter-spacing:6px;}
+    .login-logo-sub{font-size:11px;letter-spacing:4px;color:rgba(180,140,40,0.4);margin-top:3px;}
+    .divider{width:160px;height:1px;background:linear-gradient(90deg,transparent,#C9A84C,transparent);margin:1rem auto;opacity:0.5;}
+    .login-card{background:rgba(15,15,15,0.98);border:0.5px solid rgba(180,140,40,0.3);border-radius:12px;padding:2rem 2.5rem;width:100%;max-width:360px;position:relative;}
+    .login-card::before{content:'';position:absolute;top:0;left:20px;right:20px;height:1px;background:linear-gradient(90deg,transparent,rgba(180,140,40,0.5),transparent);}
+    .corner{position:absolute;width:10px;height:10px;border-color:rgba(180,140,40,0.3);border-style:solid;}
+    .tl{top:8px;left:8px;border-width:1px 0 0 1px;}
+    .tr{top:8px;right:8px;border-width:1px 1px 0 0;}
+    .bl{bottom:8px;left:8px;border-width:0 0 1px 1px;}
+    .br{bottom:8px;right:8px;border-width:0 1px 1px 0;}
+    .lc-title{font-size:11px;letter-spacing:3px;color:rgba(180,140,40,0.5);text-transform:uppercase;text-align:center;margin-bottom:1.25rem;}
+    .lc-field{margin-bottom:0.9rem;}
+    .lc-label{display:block;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:5px;}
+    .lc-input{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;padding:9px 13px;color:#e8d9a0;font-family:'Rajdhani',sans-serif;font-size:15px;outline:none;transition:border-color 0.2s;}
+    .lc-input:focus{border-color:rgba(180,140,40,0.6);}
+    .lc-input::placeholder{color:rgba(180,140,40,0.15);}
+    .lc-btn{width:100%;margin-top:1rem;padding:11px;background:linear-gradient(135deg,#C9A84C,#8B6914);border:none;border-radius:6px;color:#080808;font-family:'Orbitron',sans-serif;font-size:12px;font-weight:700;letter-spacing:3px;cursor:pointer;text-transform:uppercase;}
+    .lc-btn:hover{opacity:0.85;}
+    .lc-status{display:flex;align-items:center;gap:8px;justify-content:center;margin-top:1rem;font-size:11px;letter-spacing:2px;color:rgba(180,140,40,0.35);text-transform:uppercase;}
+    .lc-dot{width:6px;height:6px;border-radius:50%;background:#C9A84C;opacity:0.4;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:0.2;}50%{opacity:0.9;}}
+    .lc-msg{text-align:center;margin-top:0.75rem;font-size:13px;min-height:18px;}
+    .lc-msg.error{color:#e05a5a;}
+    .lc-msg.ok{color:#5ae08a;}
+    .lc-msg.loading{color:rgba(180,140,40,0.6);}
 
-    /* ADMIN */
-    .ap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;}
-    .ap-stat{background:rgba(180,140,40,0.06);border:0.5px solid rgba(180,140,40,0.2);border-radius:8px;padding:12px 14px;text-align:center;}
-    .ap-stat-n{font-family:'Orbitron',sans-serif;font-size:22px;color:#C9A84C;font-weight:700;}
-    .ap-stat-l{font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-top:2px;}
-    .sec-title{font-size:10px;letter-spacing:3px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;}
-    .ap-btn{background:linear-gradient(135deg,#C9A84C,#8B6914);border:none;border-radius:6px;color:#080808;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;padding:6px 14px;cursor:pointer;text-transform:uppercase;}
-    .ap-btn:hover{opacity:0.85;}
-    .ghost{background:transparent!important;border:0.5px solid rgba(180,140,40,0.3)!important;color:#C9A84C!important;font-family:'Rajdhani',sans-serif!important;font-size:12px!important;letter-spacing:1px!important;padding:4px 10px!important;}
-    .danger{background:transparent!important;border:0.5px solid rgba(220,60,60,0.3)!important;color:#e05a5a!important;font-family:'Rajdhani',sans-serif!important;font-size:12px!important;letter-spacing:1px!important;padding:4px 10px!important;}
-    .ap-table{width:100%;border-collapse:collapse;font-size:13px;}
-    .ap-table th{text-align:left;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.35);text-transform:uppercase;padding:8px 10px;border-bottom:0.5px solid rgba(180,140,40,0.12);font-weight:500;}
-    .ap-table td{padding:9px 10px;border-bottom:0.5px solid rgba(180,140,40,0.06);vertical-align:middle;}
-    .ap-table tr:hover td{background:rgba(180,140,40,0.03);}
-    .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;letter-spacing:1px;}
-    .b-active{background:rgba(90,224,138,0.1);color:#5ae08a;border:0.5px solid rgba(90,224,138,0.25);}
-    .b-expired{background:rgba(220,60,60,0.1);color:#e05a5a;border:0.5px solid rgba(220,60,60,0.25);}
-    .b-pending{background:rgba(180,140,40,0.1);color:#C9A84C;border:0.5px solid rgba(180,140,40,0.25);}
-    .config-box{background:rgba(180,140,40,0.05);border:0.5px solid rgba(180,140,40,0.15);border-radius:8px;padding:1rem;font-size:13px;color:rgba(180,140,40,0.6);}
-    .config-box div{margin-bottom:5px;}
-    .config-box span{color:#C9A84C;}
-    .empty-state{text-align:center;padding:2rem;color:rgba(180,140,40,0.25);font-size:13px;letter-spacing:2px;text-transform:uppercase;}
+    /* ADMIN */
+    .ap-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;}
+    .ap-stat{background:rgba(180,140,40,0.06);border:0.5px solid rgba(180,140,40,0.2);border-radius:8px;padding:12px 14px;text-align:center;}
+    .ap-stat-n{font-family:'Orbitron',sans-serif;font-size:22px;color:#C9A84C;font-weight:700;}
+    .ap-stat-l{font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-top:2px;}
+    .sec-title{font-size:10px;letter-spacing:3px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:0.75rem;display:flex;align-items:center;justify-content:space-between;}
+    .ap-btn{background:linear-gradient(135deg,#C9A84C,#8B6914);border:none;border-radius:6px;color:#080808;font-family:'Orbitron',sans-serif;font-size:10px;font-weight:700;letter-spacing:2px;padding:6px 14px;cursor:pointer;text-transform:uppercase;}
+    .ap-btn:hover{opacity:0.85;}
+    .ghost{background:transparent!important;border:0.5px solid rgba(180,140,40,0.3)!important;color:#C9A84C!important;font-family:'Rajdhani',sans-serif!important;font-size:12px!important;letter-spacing:1px!important;padding:4px 10px!important;}
+    .danger{background:transparent!important;border:0.5px solid rgba(220,60,60,0.3)!important;color:#e05a5a!important;font-family:'Rajdhani',sans-serif!important;font-size:12px!important;letter-spacing:1px!important;padding:4px 10px!important;}
+    .ap-table{width:100%;border-collapse:collapse;font-size:13px;}
+    .ap-table th{text-align:left;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.35);text-transform:uppercase;padding:8px 10px;border-bottom:0.5px solid rgba(180,140,40,0.12);font-weight:500;}
+    .ap-table td{padding:9px 10px;border-bottom:0.5px solid rgba(180,140,40,0.06);vertical-align:middle;}
+    .ap-table tr:hover td{background:rgba(180,140,40,0.03);}
+    .badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;letter-spacing:1px;}
+    .b-active{background:rgba(90,224,138,0.1);color:#5ae08a;border:0.5px solid rgba(90,224,138,0.25);}
+    .b-expired{background:rgba(220,60,60,0.1);color:#e05a5a;border:0.5px solid rgba(220,60,60,0.25);}
+    .b-pending{background:rgba(180,140,40,0.1);color:#C9A84C;border:0.5px solid rgba(180,140,40,0.25);}
+    .config-box{background:rgba(180,140,40,0.05);border:0.5px solid rgba(180,140,40,0.15);border-radius:8px;padding:1rem;font-size:13px;color:rgba(180,140,40,0.6);}
+    .config-box div{margin-bottom:5px;}
+    .config-box span{color:#C9A84C;}
+    .empty-state{text-align:center;padding:2rem;color:rgba(180,140,40,0.25);font-size:13px;letter-spacing:2px;text-transform:uppercase;}
 
-    /* MODAL */
-    .modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;z-index:200;}
-    .modal-bg.open{display:flex;}
-    .modal{background:#0d0d0d;border:0.5px solid rgba(180,140,40,0.3);border-radius:12px;padding:1.5rem;width:340px;position:relative;max-height:90vh;overflow-y:auto;}
-    .modal-title{font-family:'Orbitron',sans-serif;font-size:13px;color:#C9A84C;letter-spacing:2px;margin-bottom:1rem;}
-    .mf{margin-bottom:0.7rem;}
-    .mf label{display:block;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:4px;}
-    .mf input,.mf select{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;padding:8px 12px;color:#e8d9a0;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;}
-    .mf input:focus,.mf select:focus{border-color:rgba(180,140,40,0.5);}
-    .mf select option{background:#0d0d0d;}
-    .modal-actions{display:flex;gap:8px;margin-top:1rem;justify-content:flex-end;}
-    .modal-close{position:absolute;top:12px;right:14px;cursor:pointer;color:rgba(180,140,40,0.4);font-size:18px;background:none;border:none;}
-    .save-bar{margin-top:1.5rem;padding:0.75rem 1rem;background:rgba(180,140,40,0.06);border:0.5px solid rgba(180,140,40,0.15);border-radius:8px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:rgba(180,140,40,0.5);letter-spacing:1px;}
-    .save-bar span{font-size:11px;}
-  </style>
+    /* MODAL */
+    .modal-bg{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);align-items:center;justify-content:center;z-index:200;}
+    .modal-bg.open{display:flex;}
+    .modal{background:#0d0d0d;border:0.5px solid rgba(180,140,40,0.3);border-radius:12px;padding:1.5rem;width:340px;position:relative;max-height:90vh;overflow-y:auto;}
+    .modal-title{font-family:'Orbitron',sans-serif;font-size:13px;color:#C9A84C;letter-spacing:2px;margin-bottom:1rem;}
+    .mf{margin-bottom:0.7rem;}
+    .mf label{display:block;font-size:10px;letter-spacing:2px;color:rgba(180,140,40,0.4);text-transform:uppercase;margin-bottom:4px;}
+    .mf input,.mf select{width:100%;background:rgba(255,255,255,0.04);border:0.5px solid rgba(180,140,40,0.2);border-radius:6px;padding:8px 12px;color:#e8d9a0;font-family:'Rajdhani',sans-serif;font-size:14px;outline:none;}
+    .mf input:focus,.mf select:focus{border-color:rgba(180,140,40,0.5);}
+    .mf select option{background:#0d0d0d;}
+    .modal-actions{display:flex;gap:8px;margin-top:1rem;justify-content:flex-end;}
+    .modal-close{position:absolute;top:12px;right:14px;cursor:pointer;color:rgba(180,140,40,0.4);font-size:18px;background:none;border:none;}
+    .save-bar{margin-top:1.5rem;padding:0.75rem 1rem;background:rgba(180,140,40,0.06);border:0.5px solid rgba(180,140,40,0.15);border-radius:8px;display:flex;align-items:center;justify-content:space-between;font-size:12px;color:rgba(180,140,40,0.5);letter-spacing:1px;}
+    .save-bar span{font-size:11px;}
+  </style>
 </head>
 <body>
 
 <div class="bg-lines"></div>
 
 <div class="nav">
-  <div class="nav-logo">XuperTV <span>Control Center</span></div>
-  <div class="nav-tabs">
-    <button class="nav-tab" onclick="showPage('login',this)">Vista cliente</button>
-    <button class="nav-tab active" onclick="showPage('admin',this)">Panel admin</button>
-  </div>
+  <div class="nav-logo">XuperTV <span>Control Center</span></div>
+  <div class="nav-tabs">
+    <button class="nav-tab" onclick="showPage('login',this)">Vista cliente</button>
+    <button class="nav-tab active" onclick="showPage('admin',this)">Panel admin</button>
+  </div>
 </div>
 
-<!-- LOGIN -->
 <div class="page" id="page-login">
-  <div class="login-wrap">
-    <div class="login-logo">
-      <svg width="68" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:10px">
-        <polygon points="36,4 68,20 68,52 36,68 4,52 4,20" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0.35"/>
-        <polygon points="36,14 58,26 58,46 36,58 14,46 14,26" fill="rgba(180,140,40,0.07)" stroke="#C9A84C" stroke-width="1"/>
-        <text x="36" y="42" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="18" font-weight="700" fill="#C9A84C">X</text>
-      </svg>
-      <div class="login-logo-text">XuperTV</div>
-      <div class="login-logo-sub">Premium Streaming</div>
-    </div>
-    <div class="divider"></div>
-    <div class="login-card">
-      <div class="corner tl"></div><div class="corner tr"></div>
-      <div class="corner bl"></div><div class="corner br"></div>
-      <div class="lc-title">Acceso seguro</div>
-      <div class="lc-field">
-        <label class="lc-label">Usuario</label>
-        <input class="lc-input" id="l-user" type="text" placeholder="tu usuario"/>
-      </div>
-      <div class="lc-field">
-        <label class="lc-label">Contraseña</label>
-        <input class="lc-input" id="l-pass" type="password" placeholder="••••••••"/>
-      </div>
-      <button class="lc-btn" onclick="doLogin()">Conectar</button>
-      <div class="lc-msg" id="l-msg"></div>
-      <div class="lc-status">
-        <div class="lc-dot" id="l-dot"></div>
-        <span id="l-status">Listo para conectar</span>
-      </div>
-    </div>
-  </div>
+  <div class="login-wrap">
+    <div class="login-logo">
+      <svg width="68" height="68" viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg" style="margin-bottom:10px">
+        <polygon points="36,4 68,20 68,52 36,68 4,52 4,20" fill="none" stroke="#C9A84C" stroke-width="1.2" opacity="0.35"/>
+        <polygon points="36,14 58,26 58,46 36,58 14,46 14,26" fill="rgba(180,140,40,0.07)" stroke="#C9A84C" stroke-width="1"/>
+        <text x="36" y="42" text-anchor="middle" font-family="Orbitron,sans-serif" font-size="18" font-weight="700" fill="#C9A84C">X</text>
+      </svg>
+      <div class="login-logo-text">XuperTV</div>
+      <div class="login-logo-sub">Premium Streaming</div>
+    </div>
+    <div class="divider"></div>
+    <div class="login-card">
+      <div class="corner tl"></div><div class="corner tr"></div>
+      <div class="corner bl"></div><div class="corner br"></div>
+      <div class="lc-title">Acceso seguro</div>
+      <div class="lc-field">
+        <label class="lc-label">Usuario</label>
+        <input class="lc-input" id="l-user" type="text" placeholder="tu usuario"/>
+      </div>
+      <div class="lc-field">
+        <label class="lc-label">Contraseña</label>
+        <input class="lc-input" id="l-pass" type="password" placeholder="••••••••"/>
+      </div>
+      <button class="lc-btn" onclick="doLogin()">Conectar</button>
+      <div class="lc-msg" id="l-msg"></div>
+      <div class="lc-status">
+        <div class="lc-dot" id="l-dot"></div>
+        <span id="l-status">Listo para conectar</span>
+      </div>
+    </div>
+  </div>
 </div>
 
-<!-- ADMIN -->
 <div class="page active" id="page-admin">
-  <div class="ap-stats">
-    <div class="ap-stat"><div class="ap-stat-n" id="s-total">0</div><div class="ap-stat-l">Usuarios</div></div>
-    <div class="ap-stat"><div class="ap-stat-n" id="s-active">0</div><div class="ap-stat-l">Activos</div></div>
-    <div class="ap-stat"><div class="ap-stat-n" id="s-expired">0</div><div class="ap-stat-l">Vencidos</div></div>
-  </div>
+  <div class="ap-stats">
+    <div class="ap-stat"><div class="ap-stat-n" id="s-total">0</div><div class="ap-stat-l">Usuarios</div></div>
+    <div class="ap-stat"><div class="ap-stat-n" id="s-active">0</div><div class="ap-stat-l">Activos</div></div>
+    <div class="ap-stat"><div class="ap-stat-n" id="s-expired">0</div><div class="ap-stat-l">Vencidos</div></div>
+  </div>
 
-  <div class="sec-title">
-    <span>Usuarios registrados</span>
-    <button class="ap-btn" onclick="openModal()">+ Nuevo usuario</button>
-  </div>
+  <div class="sec-title">
+    <span>Usuarios registrados</span>
+    <button class="ap-btn" onclick="openModal()">+ Nuevo usuario</button>
+  </div>
 
-  <table class="ap-table">
-    <thead><tr>
-      <th>Usuario</th><th>Vence</th><th>Servidor VPN</th><th>Estado</th><th>Acciones</th>
-    </tr></thead>
-    <tbody id="ap-tbody"></tbody>
-  </table>
+  <table class="ap-table">
+    <thead><tr>
+      <th>Usuario</th><th>Vence</th><th>Servidor VPN</th><th>Estado</th><th>Acciones</th>
+    </tr></thead>
+    <tbody id="ap-tbody"></tbody>
+  </table>
 
-  <div class="save-bar">
-    <span id="save-status">Sin cambios pendientes</span>
-    <button class="ap-btn" onclick="saveToGithub()" id="save-btn" style="display:none">Guardar en GitHub</button>
-  </div>
+  <div class="save-bar">
+    <span id="save-status">Sin cambios pendientes</span>
+    <button class="ap-btn" onclick="saveToGithub()" id="save-btn" style="display:none">Guardar en GitHub</button>
+  </div>
 
-  <div style="margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(180,140,40,0.1);">
-    <div class="sec-title"><span>Config global VPN</span></div>
-    <div class="config-box">
-      <div>Servidor: <span id="cfg-server">mvd-c01.vpn.wlvpn.com</span></div>
-      <div>Protocolo: <span id="cfg-proto">UDP</span></div>
-      <div>Puerto: <span id="cfg-port">1194</span></div>
-    </div>
-  </div>
+  <div style="margin-top:1.5rem;padding-top:1rem;border-top:0.5px solid rgba(180,140,40,0.1);">
+    <div class="sec-title"><span>Config global VPN</span></div>
+    <div class="config-box">
+      <div>Servidor: <span id="cfg-server">mvd-c01.vpn.wlvpn.com</span></div>
+      <div>Protocolo: <span id="cfg-proto">UDP</span></div>
+      <div>Puerto: <span id="cfg-port">1194</span></div>
+    </div>
+  </div>
 </div>
 
-<!-- MODAL -->
 <div class="modal-bg" id="modal-bg">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">✕</button>
-    <div class="modal-title" id="modal-title">Nuevo usuario</div>
-    <div class="mf"><label>Usuario (login app)</label><input id="f-user" placeholder="cliente1"/></div>
-    <div class="mf"><label>Contraseña (login app)</label><input id="f-pass" type="password" placeholder="••••••••"/></div>
-    <div class="mf"><label>Usuario VPN Namecheap</label><input id="f-vu" placeholder="nc_fastvpn_user"/></div>
-    <div class="mf"><label>Contraseña VPN</label><input id="f-vp" type="password" placeholder="••••••••"/></div>
-    <div class="mf"><label>Servidor VPN</label><input id="f-srv" placeholder="mvd-c01.vpn.wlvpn.com"/></div>
-    <div class="mf"><label>Vencimiento</label><input id="f-exp" type="date"/></div>
-    <div class="mf"><label>Estado</label>
-      <select id="f-act"><option value="true">Activo</option><option value="false">Suspendido</option></select>
-    </div>
-    <div class="mf"><label>IPs permitidas (una por linea, vacio = todas)</label><textarea id="f-ips" rows="3" placeholder="192.168.1.10"></textarea></div>
-    <div class="modal-actions">
-      <button class="ap-btn ghost" onclick="closeModal()">Cancelar</button>
-      <button class="ap-btn" onclick="saveUser()">Guardar</button>
-    </div>
-  </div>
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modal-title">Nuevo usuario</div>
+    <div class="mf"><label>Usuario (login app)</label><input id="f-user" placeholder="cliente1"/></div>
+    <div class="mf"><label>Contraseña (login app)</label><input id="f-pass" type="password" placeholder="••••••••"/></div>
+    <div class="mf"><label>Usuario VPN Namecheap</label><input id="f-vu" placeholder="nc_fastvpn_user"/></div>
+    <div class="mf"><label>Contraseña VPN</label><input id="f-vp" type="password" placeholder="••••••••"/></div>
+    <div class="mf"><label>Servidor VPN</label><input id="f-srv" placeholder="mvd-c01.vpn.wlvpn.com"/></div>
+    <div class="mf"><label>Vencimiento</label><input id="f-exp" type="date"/></div>
+    <div class="mf"><label>Estado</label>
+      <select id="f-act"><option value="true">Activo</option><option value="false">Suspendido</option></select>
+    </div>
+    <div class="mf"><label>IPs permitidas (una por linea, vacio = todas)</label><textarea id="f-ips" rows="3" placeholder="192.168.1.10"></textarea></div>
+    <div class="modal-actions">
+      <button class="ap-btn ghost" onclick="closeModal()">Cancelar</button>
+      <button class="ap-btn" onclick="saveUser()">Guardar</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const JSON_URL = 'https://raw.githubusercontent.com/vbustamante662-hash/xupertv-config/main/config.json';
 const GITHUB_API = 'https://api.github.com/repos/vbustamante662-hash/xupertv-config/contents/config.json';
 const GITHUB_TOKEN = 'ghp_hm0qc8d8snSOYaSadSRft3cGxpVhC';
 let users = [];
@@ -206,158 +202,166 @@ let hasChanges = false;
 let fileSha = '';
 
 async function loadData() {
-  try {
-    const r = await fetch(JSON_URL + '?t=' + Date.now());
-    const data = await r.json();
-    users = data.users || [];
-    globalConfig = data.config || {};
-    document.getElementById('cfg-server').textContent = globalConfig.ovpn_server || '-';
-    document.getElementById('cfg-proto').textContent = (globalConfig.ovpn_proto || '-').toUpperCase();
-    document.getElementById('cfg-port').textContent = globalConfig.ovpn_port || '-';
-    render();
-  } catch(e) {
-    document.getElementById('save-status').textContent = 'Error cargando datos';
-  }
+  try {
+    // Usamos directamente la API para obtener el archivo y su código identificador SHA
+    const r = await fetch(GITHUB_API, {
+      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Cache-Control': 'no-cache' }
+    });
+    const fileData = await r.json();
+    fileSha = fileData.sha;
+    
+    // Decodificamos el contenido base64 de GitHub de forma segura
+    const data = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
+    users = data.users || [];
+    globalConfig = data.config || {};
+    
+    document.getElementById('cfg-server').textContent = globalConfig.ovpn_server || '-';
+    document.getElementById('cfg-proto').textContent = (globalConfig.ovpn_proto || '-').toUpperCase();
+    document.getElementById('cfg-port').textContent = globalConfig.ovpn_port || '-';
+    render();
+  } catch(e) {
+    document.getElementById('save-status').textContent = 'Error cargando datos de GitHub';
+  }
 }
 
 function getStatus(u) {
-  if (!u.active) return {label:'Suspendido',cls:'b-expired'};
-  const exp = new Date(u.expires), now = new Date();
-  if (exp < now) return {label:'Vencido',cls:'b-expired'};
-  const diff = Math.ceil((exp-now)/86400000);
-  if (diff <= 5) return {label:`Vence en ${diff}d`,cls:'b-pending'};
-  return {label:'Activo',cls:'b-active'};
+  if (!u.active) return {label:'Suspendido',cls:'b-expired'};
+  const exp = new Date(u.expires), now = new Date();
+  if (exp < now) return {label:'Vencido',cls:'b-expired'};
+  const diff = Math.ceil((exp-now)/86400000);
+  if (diff <= 5) return {label:`Vence en ${diff}d`,cls:'b-pending'};
+  return {label:'Activo',cls:'b-active'};
 }
 
 function render() {
-  const tbody = document.getElementById('ap-tbody');
-  tbody.innerHTML = '';
-  let active = 0, expired = 0;
-  if (users.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Sin usuarios registrados</td></tr>';
-  }
-  users.forEach((u,i) => {
-    const st = getStatus(u);
-    if (st.cls === 'b-active') active++;
-    else expired++;
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td><strong>${u.username}</strong></td>
-      <td style="color:rgba(180,140,40,0.7)">${u.expires}</td>
-      <td style="font-size:11px;color:rgba(180,140,40,0.45)">${u.ovpn_server||'-'}</td>
-      <td><span class="badge ${st.cls}">${st.label}</span></td>
-      <td style="display:flex;gap:6px">
-        <button class="ap-btn ghost" onclick="editUser(${i})">Editar</button>
-        <button class="ap-btn danger" onclick="delUser(${i})">Eliminar</button>
-      </td>`;
-    tbody.appendChild(tr);
-  });
-  document.getElementById('s-total').textContent = users.length;
-  document.getElementById('s-active').textContent = active;
-  document.getElementById('s-expired').textContent = expired;
+  const tbody = document.getElementById('ap-tbody');
+  tbody.innerHTML = '';
+  let active = 0, expired = 0;
+  if (users.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="5" class="empty-state">Sin usuarios registrados</td></tr>';
+  }
+  users.forEach((u,i) => {
+    const st = getStatus(u);
+    if (st.cls === 'b-active') active++;
+    else expired++;
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td><strong>${u.username}</strong></td>
+      <td style="color:rgba(180,140,40,0.7)">${u.expires}</td>
+      <td style="font-size:11px;color:rgba(180,140,40,0.45)">${u.ovpn_server||'-'}</td>
+      <td><span class="badge ${st.cls}">${st.label}</span></td>
+      <td style="display:flex;gap:6px">
+        <button class="ap-btn ghost" onclick="editUser(${i})">Editar</button>
+        <button class="ap-btn danger" onclick="delUser(${i})">Eliminar</button>
+      </td>`;
+    tbody.appendChild(tr);
+  });
+  document.getElementById('s-total').textContent = users.length;
+  document.getElementById('s-active').textContent = active;
+  document.getElementById('s-expired').textContent = expired;
 }
 
 function markChanged() {
-  hasChanges = true;
-  document.getElementById('save-status').textContent = 'Cambios pendientes de guardar';
-  document.getElementById('save-btn').style.display = 'inline-block';
+  hasChanges = true;
+  document.getElementById('save-status').textContent = 'Cambios pendientes de guardar';
+  document.getElementById('save-btn').style.display = 'inline-block';
 }
 
 function showPage(p, btn) {
-  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
-  document.getElementById('page-'+p).classList.add('active');
-  btn.classList.add('active');
+  document.querySelectorAll('.page').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-tab').forEach(el => el.classList.remove('active'));
+  document.getElementById('page-'+p).classList.add('active');
+  btn.classList.add('active');
 }
 
 function openModal(idx) {
-  editIdx = idx !== undefined ? idx : -1;
-  document.getElementById('modal-title').textContent = editIdx >= 0 ? 'Editar usuario' : 'Nuevo usuario';
-  if (editIdx >= 0) {
-    const u = users[editIdx];
-    document.getElementById('f-user').value = u.username;
-    document.getElementById('f-pass').value = u.password;
-    document.getElementById('f-vu').value = u.ovpn_user||'';
-    document.getElementById('f-vp').value = u.ovpn_pass||'';
-    document.getElementById('f-srv').value = u.ovpn_server||globalConfig.ovpn_server||'';
-    document.getElementById('f-exp').value = u.expires;
-    document.getElementById('f-act').value = u.active ? 'true' : 'false';
-    document.getElementById('f-ips').value = (u.allowed_ips||[]).join('\n');
-  } else {
-    ['f-user','f-pass','f-vu','f-vp','f-ips'].forEach(id => document.getElementById(id).value='');
-    document.getElementById('f-srv').value = globalConfig.ovpn_server||'mvd-c01.vpn.wlvpn.com';
-    document.getElementById('f-exp').value = '';
-    document.getElementById('f-act').value = 'true';
-  }
-  document.getElementById('modal-bg').className = 'modal-bg open';
+  editIdx = idx !== undefined ? idx : -1;
+  document.getElementById('modal-title').textContent = editIdx >= 0 ? 'Editar usuario' : 'Nuevo usuario';
+  if (editIdx >= 0) {
+    const u = users[editIdx];
+    document.getElementById('f-user').value = u.username;
+    document.getElementById('f-pass').value = u.password;
+    document.getElementById('f-vu').value = u.ovpn_user||'';
+    document.getElementById('f-vp').value = u.ovpn_pass||'';
+    document.getElementById('f-srv').value = u.ovpn_server||globalConfig.ovpn_server||'';
+    document.getElementById('f-exp').value = u.expires;
+    document.getElementById('f-act').value = u.active ? 'true' : 'false';
+    document.getElementById('f-ips').value = (u.allowed_ips||[]).join('\n');
+  } else {
+    ['f-user','f-pass','f-vu','f-vp','f-ips'].forEach(id => document.getElementById(id).value='');
+    document.getElementById('f-srv').value = globalConfig.ovpn_server||'mvd-c01.vpn.wlvpn.com';
+    document.getElementById('f-exp').value = '';
+    document.getElementById('f-act').value = 'true';
+  }
+  document.getElementById('modal-bg').className = 'modal-bg open';
 }
 
 function closeModal() { document.getElementById('modal-bg').className = 'modal-bg'; }
 
 function saveUser() {
-  const ips = document.getElementById('f-ips').value.split('\n').map(v=>v.trim()).filter(Boolean);
-  const u = {
-    username: document.getElementById('f-user').value.trim(),
-    password: document.getElementById('f-pass').value.trim(),
-    active: document.getElementById('f-act').value === 'true',
-    expires: document.getElementById('f-exp').value,
-    ovpn_user: document.getElementById('f-vu').value.trim(),
-    ovpn_pass: document.getElementById('f-vp').value.trim(),
-    ovpn_server: document.getElementById('f-srv').value.trim(),
-    allowed_ips: ips
-  };
-  if (!u.username || !u.expires) return;
-  if (editIdx >= 0) users[editIdx] = u;
-  else users.push(u);
-  closeModal();
-  render();
-  markChanged();
+  const ips = document.getElementById('f-ips').value.split('\n').map(v=>v.trim()).filter(Boolean);
+  const u = {
+    username: document.getElementById('f-user').value.trim(),
+    password: document.getElementById('f-pass').value.trim(),
+    active: document.getElementById('f-act').value === 'true',
+    expires: document.getElementById('f-exp').value,
+    ovpn_user: document.getElementById('f-vu').value.trim(),
+    ovpn_pass: document.getElementById('f-vp').value.trim(),
+    ovpn_server: document.getElementById('f-srv').value.trim(),
+    allowed_ips: ips
+  };
+  if (!u.username || !u.expires) return;
+  if (editIdx >= 0) users[editIdx] = u;
+  else users.push(u);
+  closeModal();
+  render();
+  markChanged();
 }
 
 function editUser(i) { openModal(i); }
 function delUser(i) { users.splice(i,1); render(); markChanged(); }
 
 async function saveToGithub() {
-  if (!GITHUB_TOKEN) {
-    document.getElementById('save-status').textContent = 'Configurá el token de GitHub primero';
-    return;
-  }
-  const payload = { config: globalConfig, users };
-  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
-  const body = { message: 'Actualización de usuarios desde panel', content };
-  if (fileSha) body.sha = fileSha;
-  try {
-    document.getElementById('save-status').textContent = 'Guardando...';
-    const r = await fetch(GITHUB_API, {
-      method: 'PUT',
-      headers: { Authorization: `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify(body)
-    });
-    if (r.ok) {
-      const data = await r.json();
-      fileSha = data.content.sha;
-      hasChanges = false;
-      document.getElementById('save-status').textContent = '✓ Guardado en GitHub correctamente';
-      document.getElementById('save-btn').style.display = 'none';
-    } else {
-      document.getElementById('save-status').textContent = 'Error al guardar. Revisá el token.';
-    }
-  } catch(e) {
-    document.getElementById('save-status').textContent = 'Error de conexión con GitHub';
-  }
+  if (!GITHUB_TOKEN) {
+    document.getElementById('save-status').textContent = 'Configurá el token de GitHub primero';
+    return;
+  }
+  const payload = { config: globalConfig, users };
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
+  const body = { message: 'Actualización de usuarios desde panel', content };
+  if (fileSha) body.sha = fileSha;
+  try {
+    document.getElementById('save-status').textContent = 'Guardando...';
+    const r = await fetch(GITHUB_API, {
+      method: 'PUT',
+      headers: { Authorization: `token ${GITHUB_TOKEN}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    if (r.ok) {
+      const data = await r.json();
+      fileSha = data.content.sha;
+      hasChanges = false;
+      document.getElementById('save-status').textContent = '✓ Guardado en GitHub correctamente';
+      document.getElementById('save-btn').style.display = 'none';
+    } else {
+      document.getElementById('save-status').textContent = 'Error al guardar. Revisá el token.';
+    }
+  } catch(e) {
+    document.getElementById('save-status').textContent = 'Error de conexión con GitHub';
+  }
 }
 
 function doLogin() {
-  const user = document.getElementById('l-user').value.trim();
-  const pass = document.getElementById('l-pass').value.trim();
-  const msg = document.getElementById('l-msg');
-  const dot = document.getElementById('l-dot');
-  const status = document.getElementById('l-status');
-  if (!user || !pass) { msg.className='lc-msg error'; msg.textContent='Ingresá usuario y contraseña'; return; }
-  msg.className='lc-msg loading'; msg.textContent='Verificando credenciales...';
-  status.textContent='Conectando VPN...';
-  setTimeout(()=>{ msg.textContent='Estableciendo túnel seguro...'; }, 1200);
-  setTimeout(()=>{ msg.className='lc-msg ok'; msg.textContent='✓ Conexión establecida'; dot.style.background='#5ae08a'; dot.style.opacity='1'; dot.style.animation='none'; status.textContent='VPN activa'; }, 2800);
+  const user = document.getElementById('l-user').value.trim();
+  const pass = document.getElementById('l-pass').value.trim();
+  const msg = document.getElementById('l-msg');
+  const dot = document.getElementById('l-dot');
+  const status = document.getElementById('l-status');
+  if (!user || !pass) { msg.className='lc-msg error'; msg.textContent='Ingresá usuario y contraseña'; return; }
+  msg.className='lc-msg loading'; msg.textContent='Verificando credenciales...';
+  status.textContent='Conectando VPN...';
+  setTimeout(()=>{ msg.textContent='Estableciendo túnel seguro...'; }, 1200);
+  setTimeout(()=>{ msg.className='lc-msg ok'; msg.textContent='✓ Conexión establecida'; dot.style.background='#5ae08a'; dot.style.opacity='1'; dot.style.animation='none'; status.textContent='VPN activa'; }, 2800);
 }
 
 loadData();
