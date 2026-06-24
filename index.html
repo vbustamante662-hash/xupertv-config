@@ -199,7 +199,7 @@
 <script>
 const JSON_URL = 'https://raw.githubusercontent.com/vbustamante662-hash/xupertv-config/main/config.json';
 const GITHUB_API = 'https://api.github.com/repos/vbustamante662-hash/xupertv-config/contents/config.json';
-const GITHUB_TOKEN = 'ghp_hm0qc8d8snSOYaSadSRft3cGxpVhC'; 
+const GITHUB_TOKEN = 'ghp_hm0qc8d8snSOYaSadSRft3cGxpVhC'; // <-- ¡Tu token pegado aquí!
 let users = [];
 let globalConfig = {};
 let editIdx = -1;
@@ -208,16 +208,8 @@ let fileSha = '';
 
 async function loadData() {
   try {
-    // Obtenemos los datos y el SHA del archivo al mismo tiempo desde la API oficial de GitHub
-    const r = await fetch(GITHUB_API, {
-      headers: { 'Authorization': `token ${GITHUB_TOKEN}`, 'Cache-Control': 'no-cache' }
-    });
-    const fileData = await r.json();
-    fileSha = fileData.sha; // Guardamos el SHA necesario para poder actualizar luego
-    
-    // Decodificamos el contenido base64 del archivo config.json de GitHub
-    const data = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
-    
+    const r = await fetch(JSON_URL + '?t=' + Date.now());
+    const data = await r.json();
     users = data.users || [];
     globalConfig = data.config || {};
     document.getElementById('cfg-server').textContent = globalConfig.ovpn_server || '-';
@@ -225,7 +217,7 @@ async function loadData() {
     document.getElementById('cfg-port').textContent = globalConfig.ovpn_port || '-';
     render();
   } catch(e) {
-    document.getElementById('save-status').textContent = 'Error cargando datos desde la API';
+    document.getElementById('save-status').textContent = 'Error cargando datos';
   }
 }
 
