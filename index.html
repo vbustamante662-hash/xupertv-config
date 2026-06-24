@@ -196,14 +196,20 @@
 </div>
 
 <script>
+<script>
 const JSON_URL = 'https://raw.githubusercontent.com/vbustamante662-hash/xupertv-config/main/config.json';
 const GITHUB_API = 'https://api.github.com/repos/vbustamante662-hash/xupertv-config/contents/config.json';
-const GITHUB_TOKEN = ''; // Pegar token aquí o usar variable de entorno
+
+// Inyección directa del token para evitar el uso de F12 / Consola
+const GITHUB_TOKEN = 'ghp_hm0qc8d8snSOYaSadSRft3cGxpVhC'; 
+
 let users = [];
 let globalConfig = {};
 let editIdx = -1;
 let hasChanges = false;
 let fileSha = '';
+
+// ... (El resto de tus funciones como loadData(), render(), etc., se quedan exactamente igual)
 
 async function loadData() {
   try {
