@@ -13,6 +13,16 @@
       "ovpn_user": "nc_fastvpn_user1",
       "ovpn_pass": "nc_fastvpn_pass1",
       "allowed_ips": []
+    },
+    {
+      "username": "victor",
+      "password": "1234",
+      "active": true,
+      "expires": "2026-07-25",
+      "ovpn_user": "ncpqwdqw@namecheap",
+      "ovpn_pass": "qeAB2Hkruk",
+      "ovpn_server": "mvd-c01.vpn.wlvpn.com",
+      "allowed_ips": []
     }
   ]
 }
