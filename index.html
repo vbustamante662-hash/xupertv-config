@@ -332,8 +332,8 @@ function editUser(i) { openModal(i); }
 function delUser(i) { users.splice(i,1); render(); markChanged(); }
 
 async function saveToGithub() {
-  const tokenToUse = GITHUB_TOKEN || (typeof process !== 'undefined' && process.env ? process.env.GITHUB_TOKEN : '');
-  if (!tokenToUse) {
+  const tokenToUse = GITHUB_TOKEN;
+  if (!tokenToUse || tokenToUse === '') {
     document.getElementById('save-status').textContent = 'Error: Token no detectado en el entorno de Cloudflare';
     return;
   }
