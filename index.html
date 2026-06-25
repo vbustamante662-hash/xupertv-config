@@ -209,8 +209,7 @@ let fileSha = '';
 
 async function loadData() {
   try {
-    // Si no encuentra el token directo en el código, intentará usar la inyección invisible del entorno
-    const tokenToUse = GITHUB_TOKEN || (typeof process !== 'undefined' && process.env ? process.env.GITHUB_TOKEN : '');
+    const tokenToUse = GITHUB_TOKEN;
     
     const headers = { 'Cache-Control': 'no-cache' };
     if (tokenToUse) {
