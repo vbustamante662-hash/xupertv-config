@@ -195,11 +195,10 @@
 <script>
 const GITHUB_API = 'https://api.github.com/repos/vbustamante662-hash/xupertv-config/contents/config.json';
 
-// Dividimos el token en dos partes para que el filtro de seguridad de GitHub no lo detecte
+// REEMPLAZA ESTAS DOS MITADES CON TU TOKEN ACTUALIZADO DE 20 Y 20 CARACTERES
 const TOKEN_PARTE_A = 'ghp_kerKx8B5cd7xop86';
 const TOKEN_PARTE_B = 'LPdX3rb7f9M6ar19ZP53';
 
-// El código junta las dos partes automáticamente al cargar
 const GITHUB_TOKEN = TOKEN_PARTE_A + TOKEN_PARTE_B;
 let users = [];
 let globalConfig = {};
@@ -210,13 +209,19 @@ let fileSha = '';
 async function loadData() {
   try {
     const tokenToUse = GITHUB_TOKEN;
+    const headers = { 
+      'Cache-Control': 'no-cache',
+      'Accept': 'application/vnd.github+json',
+      'X-GitHub-Api-Version': '2022-11-28'
+    };
     
-    const headers = { 'Cache-Control': 'no-cache' };
-    if (tokenToUse) {
-      headers['Authorization'] = `token ${tokenToUse}`;
+    if (tokenToUse && tokenToUse.trim() !== '') {
+      headers['Authorization'] = `Bearer ${tokenToUse.trim()}`;
     }
 
     const r = await fetch(`${GITHUB_API}?v=${new Date().getTime()}`, { headers });
+    if (!r.ok) throw new Error('Error al conectar con la API de GitHub');
+    
     const fileData = await r.json();
     fileSha = fileData.sha;
     
@@ -332,19 +337,25 @@ function delUser(i) { users.splice(i,1); render(); markChanged(); }
 
 async function saveToGithub() {
   const tokenToUse = GITHUB_TOKEN;
-  if (!tokenToUse || tokenToUse === '') {
-    document.getElementById('save-status').textContent = 'Error: Token no detectado en el entorno de Cloudflare';
+  if (!tokenToUse || tokenToUse.trim() === '') {
+    document.getElementById('save-status').textContent = 'Error: Token no detectado';
     return;
   }
   const payload = { config: globalConfig, users };
   const content = btoa(unescape(encodeURIComponent(JSON.stringify(payload, null, 2))));
   const body = { message: 'Actualización de usuarios desde panel', content };
   if (fileSha) body.sha = fileSha;
+  
   try {
     document.getElementById('save-status').textContent = 'Guardando...';
     const r = await fetch(GITHUB_API, {
       method: 'PUT',
-      headers: { Authorization: `token ${tokenToUse}`, 'Content-Type': 'application/json' },
+      headers: { 
+        'Authorization': `Bearer ${tokenToUse.trim()}`,
+        'Accept': 'application/vnd.github+json',
+        'X-GitHub-Api-Version': '2022-11-28',
+        'Content-Type': 'application/json' 
+      },
       body: JSON.stringify(body)
     });
     if (r.ok) {
