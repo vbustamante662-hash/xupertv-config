@@ -157,7 +157,7 @@
   </table>
 
   <div class="save-bar">
-    <span id="save-status">Sin cambios pendientes</span>
+    <span id="save-status">Cargando datos...</span>
     <button class="ap-btn" onclick="saveToGithub()" id="save-btn" style="display:none">Guardar en GitHub</button>
   </div>
 
@@ -208,26 +208,29 @@ let fileSha = '';
 
 async function loadData() {
   try {
-    // Al ser un repositorio público, leemos SIN TOKEN para evitar errores de CORS
-    const headers = { 
-      'Cache-Control': 'no-cache',
-      'Accept': 'application/vnd.github+json',
-      'X-GitHub-Api-Version': '2022-11-28'
-    };
+    // Al ser un repositorio público, leemos directamente el archivo RAW en bruto. 
+    // Esto evita CUALQUIER tipo de bloqueo por CORS o problemas de Tokens al cargar la web.
+    const rawUrl = 'https://raw.githubusercontent.com/vbustamante662-hash/xupertv-config/main/config.json';
+    
+    const r = await fetch(`${rawUrl}?v=${new Date().getTime()}`);
+    if (!r.ok) throw new Error('Error al leer el archivo JSON público desde Raw');
+    
+    const data = await r.json();
+    
+    // Obtenemos el SHA en segundo plano solo para cuando necesitemos guardar cambios
+    fetch(GITHUB_API)
+      .then(res => res.json())
+      .then(fileData => { fileSha = fileData.sha; })
+      .catch(err => console.log("Aviso: No se pudo precargar el SHA para guardar:", err));
 
-    const r = await fetch(`${GITHUB_API}?v=${new Date().getTime()}`, { headers });
-    if (!r.ok) throw new Error('Error al leer de la API');
-    
-    const fileData = await r.json();
-    fileSha = fileData.sha;
-    
-    const data = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
     users = data.users || [];
     globalConfig = data.config || {};
     
     document.getElementById('cfg-server').textContent = globalConfig.ovpn_server || '-';
     document.getElementById('cfg-proto').textContent = (globalConfig.ovpn_proto || '-').toUpperCase();
     document.getElementById('cfg-port').textContent = globalConfig.ovpn_port || '-';
+    
+    document.getElementById('save-status').textContent = 'Sin cambios pendientes';
     render();
   } catch(e) {
     document.getElementById('save-status').textContent = 'Error cargando datos de GitHub';
