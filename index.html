@@ -216,7 +216,7 @@ async function loadData() {
       headers['Authorization'] = `token ${tokenToUse}`;
     }
 
-    const r = await fetch(GITHUB_API, { headers });
+    const r = await fetch(`${GITHUB_API}?v=${new Date().getTime()}`, { headers });
     const fileData = await r.json();
     fileSha = fileData.sha;
     
